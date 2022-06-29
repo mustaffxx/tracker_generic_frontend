@@ -1,0 +1,12 @@
+.signup-form {
+  width: 100vw;
+  height: 100vw;
+}
+
+.box {
+  width: 50vw;
+  align-content: center;
+  justify-content: center;
+  margin: 25%;
+  margin-top: 5%;
+}
