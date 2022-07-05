@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,6 +8,8 @@ import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import './styles.css';
 
 const Signin = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -24,12 +27,14 @@ const Signin = () => {
 
   const handleRequest = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    console.log(email + '' + password);
-    axios
-      .post('http://localhost:3000/login', {
+    axios({
+      method: 'post',
+      url: process.env.REACT_APP_API_BASE_URL + '/login',
+      data: {
         email,
         password,
-      })
+      },
+    })
       .then((response) => {
         setErrorMessage('');
         console.log('ok: ');
@@ -39,9 +44,18 @@ const Signin = () => {
         setErrorMessage(
           'The email address or password you provided does not match our records.',
         );
-        console.log('error: ');
-        console.log(error);
+        const errorData = {
+          status: error.response.status,
+          error: error.response.data.error,
+          headers: error.response.headers,
+        };
+        console.log(errorData);
       });
+  };
+
+  const handleSignup = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    navigate('/signup');
   };
 
   return (
@@ -82,10 +96,15 @@ const Signin = () => {
           </p>
         </div>
 
-        <div className="field is-grouped">
+        <div className="field is-grouped is-justify-content-space-between">
           <div className="control">
             <button className="button is-primary" onClick={handleRequest}>
               Sign in
+            </button>
+          </div>
+          <div className="control">
+            <button className="button is-primary" onClick={handleSignup}>
+              Sign Up
             </button>
           </div>
         </div>
